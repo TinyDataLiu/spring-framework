@@ -511,13 +511,18 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		return this.applicationListeners;
 	}
 
+	//费劲 这里应该是初始化的方法了 。  首先这个类就是一个IOC 容器的实现。
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {
 		synchronized (this.startupShutdownMonitor) {
-			// Prepare this context for refreshing.
+			//
+			//
+			//准备刷新此上下文。 上下文刷新的准备工作
 			prepareRefresh();
 
-			// Tell the subclass to refresh the internal bean factory.
+			//
+			//
+			//告诉子类刷新内部bean工厂。
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
