@@ -187,7 +187,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/** Flag that indicates whether this context has been closed already. */
 	private final AtomicBoolean closed = new AtomicBoolean();
 
-	/** Synchronization monitor for the "refresh" and "destroy". */
+	/** 设置了一个监视器，用于监控刷新，还设有销毁动作。 */
 	private final Object startupShutdownMonitor = new Object();
 
 	/** Reference to the JVM shutdown hook, if registered. */
@@ -514,6 +514,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	//费劲 这里应该是初始化的方法了 。  首先这个类就是一个IOC 容器的实现。
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {
+		//锁了一个这个同步对象， 看看是啥鬼东西。没啥鬼用， 就是用来处理线程安全的。
+		//证明refresh 方法时线程安全的方法。
 		synchronized (this.startupShutdownMonitor) {
 			//
 			//
