@@ -115,15 +115,12 @@ class GroovyBeanDefinitionReaderTests {
 	void contextComponentScanSpringTag() {
 		def appCtx = new GenericApplicationContext()
 		def reader = new GroovyBeanDefinitionReader(appCtx)
-
 		reader.beans {
 			xmlns context:"http://www.springframework.org/schema/context"
 
 			context.'component-scan'( 'base-package' :" org.springframework.context.groovy" )
 		}
-
 		appCtx.refresh()
-
 		def p = appCtx.getBean("person")
 		assertTrue(p instanceof AdvisedPerson)
 	}

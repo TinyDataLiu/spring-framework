@@ -116,6 +116,9 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 
 
 	/**
+	 * 这里是一个创建容器的过程，使用委派模式
+	 * //对父类方法的实现， 是通过委派设计模式委派到这里的。
+	 *
 	 * 实现的AbstractApplicationContext.refreshBeanFactory()
 	 * This implementation performs an actual refresh of this context's underlying
 	 * bean factory, shutting down the previous bean factory (if any) and
@@ -123,20 +126,19 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 */
 	@Override
 	protected final void refreshBeanFactory() throws BeansException {
-		//判断是会否有  BeanFactory() 其实就是IOC 容器
+		//如果已经有容器，销毁容器中的 bean，关闭容器
 		if (hasBeanFactory()) {
-			//销毁所有的beans
-			destroyBeans();
-			//关闭工厂类
-			closeBeanFactory();
+			destroyBeans(); 	//销毁所有的beans
+			closeBeanFactory();	//关闭容器
 		}
 		try {
-			//初始化一个默认的beanFactory() 默认的IOC 容器
+			//创建 IOC 容器
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
 			//设置ID
 			beanFactory.setSerializationId(getId());
+			//对IOC容器进行定制化，如设置启动参数，开启注解的自动装配等
 			customizeBeanFactory(beanFactory);
-			//加载Bean 定义文件。
+			//调用载入Bean定义的方法，主要这里又使用了一个委派模式，在当前类中只定义了抽象的 loadBeanDefinitions方法，具体的实现调用子类容器
 			loadBeanDefinitions(beanFactory);
 			synchronized (this.beanFactoryMonitor) {
 				this.beanFactory = beanFactory;
