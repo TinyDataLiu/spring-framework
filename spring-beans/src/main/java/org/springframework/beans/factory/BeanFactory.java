@@ -112,6 +112,8 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessAfterInitialization
  * @see DisposableBean#destroy
  * @see org.springframework.beans.factory.support.RootBeanDefinition#getDestroyMethodName
+ *
+ * 之定义了最基本的IOC 容器行为。根本不关心具体实现。 抽象工厂
  */
 public interface BeanFactory {
 
@@ -136,6 +138,7 @@ public interface BeanFactory {
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the specified name
 	 * @throws BeansException if the bean could not be obtained
 	 */
+	//通过名称获得Bean
 	Object getBean(String name) throws BeansException;
 
 	/**
@@ -152,6 +155,7 @@ public interface BeanFactory {
 	 * @throws NoSuchBeanDefinitionException if there is no such bean definition
 	 * @throws BeanNotOfRequiredTypeException if the bean is not of the required type
 	 * @throws BeansException if the bean could not be created
+	 * 名称+类型的方式获得Bean
 	 */
 	<T> T getBean(String name, Class<T> requiredType) throws BeansException;
 
@@ -168,6 +172,7 @@ public interface BeanFactory {
 	 * the affected bean isn't a prototype
 	 * @throws BeansException if the bean could not be created
 	 * @since 2.5
+	 * 名称+参数获得
 	 */
 	Object getBean(String name, Object... args) throws BeansException;
 
@@ -184,6 +189,7 @@ public interface BeanFactory {
 	 * @throws BeansException if the bean could not be created
 	 * @since 3.0
 	 * @see ListableBeanFactory
+	 * 根据类型获得Bean
 	 */
 	<T> T getBean(Class<T> requiredType) throws BeansException;
 
@@ -204,6 +210,7 @@ public interface BeanFactory {
 	 * the affected bean isn't a prototype
 	 * @throws BeansException if the bean could not be created
 	 * @since 4.1
+	 * Bean类型+ 参数获得Bean
 	 */
 	<T> T getBean(Class<T> requiredType, Object... args) throws BeansException;
 
@@ -214,6 +221,7 @@ public interface BeanFactory {
 	 * @return a corresponding provider handle
 	 * @since 5.1
 	 * @see #getBeanProvider(ResolvableType)
+	 * 获得Bean的提供者
 	 */
 	<T> ObjectProvider<T> getBeanProvider(Class<T> requiredType);
 
@@ -230,6 +238,7 @@ public interface BeanFactory {
 	 * @see ObjectProvider#iterator()
 	 * @see ObjectProvider#stream()
 	 * @see ObjectProvider#orderedStream()
+	 * 获得Bean的提供者
 	 */
 	<T> ObjectProvider<T> getBeanProvider(ResolvableType requiredType);
 
@@ -247,6 +256,7 @@ public interface BeanFactory {
 	 * will be able to obtain an instance for the same name.
 	 * @param name the name of the bean to query
 	 * @return whether a bean with the given name is present
+	 * 是否存在某个Bean
 	 */
 	boolean containsBean(String name);
 
@@ -264,6 +274,7 @@ public interface BeanFactory {
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
 	 * @see #getBean
 	 * @see #isPrototype
+	 * 是否单利
 	 */
 	boolean isSingleton(String name) throws NoSuchBeanDefinitionException;
 
@@ -282,6 +293,7 @@ public interface BeanFactory {
 	 * @since 2.0.3
 	 * @see #getBean
 	 * @see #isSingleton
+	 * 是否原型Bean
 	 */
 	boolean isPrototype(String name) throws NoSuchBeanDefinitionException;
 
@@ -299,6 +311,7 @@ public interface BeanFactory {
 	 * @since 4.2
 	 * @see #getBean
 	 * @see #getType
+	 * 指定的Bean 是否为某种类型
 	 */
 	boolean isTypeMatch(String name, ResolvableType typeToMatch) throws NoSuchBeanDefinitionException;
 
@@ -332,6 +345,7 @@ public interface BeanFactory {
 	 * @since 1.1.2
 	 * @see #getBean
 	 * @see #isTypeMatch
+	 * 获取Bean的类型
 	 */
 	@Nullable
 	Class<?> getType(String name) throws NoSuchBeanDefinitionException;
@@ -346,6 +360,7 @@ public interface BeanFactory {
 	 * @param name the bean name to check for aliases
 	 * @return the aliases, or an empty array if none
 	 * @see #getBean
+	 * 获取Bean的别名
 	 */
 	String[] getAliases(String name);
 
