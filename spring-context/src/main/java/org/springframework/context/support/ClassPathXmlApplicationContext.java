@@ -76,9 +76,10 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	}
 
 	/**
+	 * 1.通过构造方法创建一个ApplicationContext
 	 * Create a new ClassPathXmlApplicationContext, loading the definitions
 	 * from the given XML file and automatically refreshing the context.
-	 * @param configLocation resource location
+	 * @param configLocation  resource location 配置文件位置
 	 * @throws BeansException if context creation failed
 	 */
 	public ClassPathXmlApplicationContext(String configLocation) throws BeansException {
@@ -120,25 +121,27 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	 * @see #refresh()
 	 */
 	public ClassPathXmlApplicationContext(String[] configLocations, boolean refresh) throws BeansException {
+		//实际调用下面的ClassPathXmlApplicationContext()
 		this(configLocations, refresh, null);
 	}
 
 	/**
+	 * 还有像 AnnotationConfigApplicationContext 、 FileSystemXmlApplicationContext 、 XmlWebApplicationContext
+	 * 等都继承自父容器 AbstractApplicationContext主要用到了装饰器模式 和策略模式，最终都是调用 refresh()方法。
 	 * Create a new ClassPathXmlApplicationContext with the given parent,
 	 * loading the definitions from the given XML files.
-	 * @param configLocations array of resource locations
-	 * @param refresh whether to automatically refresh the context,
+	 * @param configLocations array of resource locations 配置文件数组，说明可以配置多个配置文件
+	 * @param refresh whether to automatically refresh the context,	是否刷新容器
 	 * loading all bean definitions and creating all singletons.
 	 * Alternatively, call refresh manually after further configuring the context.
-	 * @param parent the parent context
+	 * @param parent the parent context	父容器
 	 * @throws BeansException if context creation failed
 	 * @see #refresh()
 	 */
-	public ClassPathXmlApplicationContext(
-			String[] configLocations, boolean refresh, @Nullable ApplicationContext parent)
-			throws BeansException {
-
+	public ClassPathXmlApplicationContext(String[] configLocations, boolean refresh, @Nullable ApplicationContext parent) throws BeansException {
+		//调用父类容器的构造方法(super(parent)方法)为容器设置好Bean资源加载器。
 		super(parent);
+		//
 		setConfigLocations(configLocations);
 		if (refresh) {
 			refresh();
