@@ -147,7 +147,8 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 	 */
 	@Override
 	public final void init() throws ServletException {
-		// Set bean properties from init parameters. //通过配置文件来初始化配置信息 init-param = spring-mvc-servlet.xml
+		// Set bean properties from init parameters.
+		// 通过配置文件来初始化配置信息 init-param = spring-mvc-servlet.xml
 		PropertyValues pvs = new ServletConfigPropertyValues(getServletConfig(), this.requiredProperties);
 		//如果配置信息已经存在，先不管他干啥了， 我们的默认是第一次初始化，这里应该没有东西
 		if (!pvs.isEmpty()) {
@@ -181,7 +182,7 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 	}
 
 	/**
-		空方法，并提示由 子类从写
+	 * 空方法，并提示由子类重写
 	 * Subclasses may override this to perform custom initialization.
 	 * All bean properties of this servlet will have been set before this
 	 * method is invoked.
