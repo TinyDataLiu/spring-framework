@@ -46,6 +46,7 @@ public abstract class UiApplicationContextUtils {
 
 
 	/**
+	 * 实例化
 	 * Initialize the ThemeSource for the given application context,
 	 * autodetecting a bean with the name "themeSource". If no such
 	 * bean is found, a default (empty) ThemeSource will be used.
