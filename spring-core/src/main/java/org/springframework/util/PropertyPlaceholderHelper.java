@@ -124,8 +124,8 @@ public class PropertyPlaceholderHelper {
 		return parseStringValue(value, placeholderResolver, null);
 	}
 
-	protected String parseStringValue(
-			String value, PlaceholderResolver placeholderResolver, @Nullable Set<String> visitedPlaceholders) {
+	//具体解析路径的方法。
+	protected String parseStringValue( String value, PlaceholderResolver placeholderResolver, @Nullable Set<String> visitedPlaceholders) {
 
 		int startIndex = value.indexOf(this.placeholderPrefix);
 		if (startIndex == -1) {

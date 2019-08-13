@@ -152,6 +152,7 @@ public abstract class BeanDefinitionReaderUtils {
 	}
 
 	/**
+	 * 这里就是保存BeanDefinition 地方
 	 * Register the given bean definition with the given bean factory.
 	 * @param definitionHolder the bean definition including name and aliases
 	 * @param registry the bean factory to register with

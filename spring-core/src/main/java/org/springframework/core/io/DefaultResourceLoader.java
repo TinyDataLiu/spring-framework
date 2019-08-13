@@ -139,7 +139,8 @@ public class DefaultResourceLoader implements ResourceLoader {
 		this.resourceCaches.clear();
 	}
 
-
+	//解析不同种类的配置。
+	//
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");

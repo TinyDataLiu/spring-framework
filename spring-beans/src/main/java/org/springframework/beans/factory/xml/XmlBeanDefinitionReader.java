@@ -139,6 +139,11 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		super(registry);
 	}
 
+	@Override
+	public int loadBeanDefinitions(Resource... resources) throws BeanDefinitionStoreException {
+		return super.loadBeanDefinitions(resources);
+	}
+
 
 	/**
 	 * Set whether to use XML validation. Default is {@code true}.
