@@ -51,6 +51,8 @@ public class DelegatingEntityResolver implements EntityResolver {
 
 
 	/**
+	 * 用于解释具体的定义
+	 * 通过委派模式来 实现具体的Entity解释器
 	 * Create a new DelegatingEntityResolver that delegates to
 	 * a default {@link BeansDtdResolver} and a default {@link PluggableSchemaResolver}.
 	 * <p>Configures the {@link PluggableSchemaResolver} with the supplied

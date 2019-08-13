@@ -65,6 +65,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 
 
 	/**
+	 * 对不同类型的环境配置不同的选择器
 	 * Create a new AbstractBeanDefinitionReader for the given bean factory.
 	 * <p>If the passed-in bean factory does not only implement the BeanDefinitionRegistry
 	 * interface but also the ResourceLoader interface, it will be used as default
@@ -80,11 +81,13 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	 * in the form of a BeanDefinitionRegistry
 	 * @see #setResourceLoader
 	 * @see #setEnvironment
+	 *
+	 * 设置资源加载器
+	 * 设置环境变量
 	 */
 	protected AbstractBeanDefinitionReader(BeanDefinitionRegistry registry) {
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		this.registry = registry;
-
 		// Determine ResourceLoader to use.
 		if (this.registry instanceof ResourceLoader) {
 			this.resourceLoader = (ResourceLoader) this.registry;
@@ -92,7 +95,6 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		else {
 			this.resourceLoader = new PathMatchingResourcePatternResolver();
 		}
-
 		// Inherit Environment if possible
 		if (this.registry instanceof EnvironmentCapable) {
 			this.environment = ((EnvironmentCapable) this.registry).getEnvironment();
