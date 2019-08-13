@@ -514,7 +514,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 
 	/**
-	* 这里是HttpServletBean ,调用的方法， 并且是final的
+	*  这里是HttpServletBean ,调用的方法， 并且是final的
 	 * Overridden method of {@link HttpServletBean}, invoked after any bean properties
 	 * have been set. Creates this servlet's WebApplicationContext.
 	 */
@@ -581,6 +581,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			}
 		}
 		if (wac == null) {
+			//继续验证是否有可用的容器
 			// No context instance was injected at construction time -> see if one
 			// has been registered in the servlet context. If one exists, it is assumed
 			// that the parent context (if any) has already been set and that the
@@ -589,7 +590,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		}
 		if (wac == null) {
 			// No context instance is defined for this servlet -> create a local one
-			//前面的东西看不懂， 不看了， 但是这里有一个
+			// 如果最终没有找到可用的容器， 则开始自己创建一个
 			wac = createWebApplicationContext(rootContext);
 		}
 
@@ -671,10 +672,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		if (configLocation != null) {
 			wac.setConfigLocation(configLocation);
 		}
-
 		//看看这个方法。 这里将实例化的 ConfigurableWebApplicationContext 传入
 		configureAndRefreshWebApplicationContext(wac);
-
 		return wac;
 	}
 
@@ -708,6 +707,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 		postProcessWebApplicationContext(wac);
 		applyInitializers(wac);
+		//这里挺重要的
 		wac.refresh();
 	}
 
