@@ -119,8 +119,7 @@ import org.springframework.util.StringUtils;
  * @see #resolveDependency
  */
 @SuppressWarnings("serial")
-public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
-		implements ConfigurableListableBeanFactory, BeanDefinitionRegistry, Serializable {
+public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements ConfigurableListableBeanFactory, BeanDefinitionRegistry, Serializable {
 
 	@Nullable
 	private static Class<?> javaxInjectProviderClass;
@@ -138,8 +137,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	/** Map from serialized id to factory instance. */
-	private static final Map<String, Reference<DefaultListableBeanFactory>> serializableFactories =
-			new ConcurrentHashMap<>(8);
+	private static final Map<String, Reference<DefaultListableBeanFactory>> serializableFactories = new ConcurrentHashMap<>(8);
 
 	/** Optional id for this factory, for serialization purposes. */
 	@Nullable
