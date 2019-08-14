@@ -50,6 +50,7 @@ public interface ConfigurableListableBeanFactory
 	void ignoreDependencyType(Class<?> type);
 
 	/**
+	 * 忽略哪些接口自动注入
 	 * Ignore the given dependency interface for autowiring.
 	 * <p>This will typically be used by application contexts to register
 	 * dependencies that are resolved in other ways, like BeanFactory through

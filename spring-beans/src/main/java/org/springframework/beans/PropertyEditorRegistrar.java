@@ -17,6 +17,7 @@
 package org.springframework.beans;
 
 /**
+ *
  * Interface for strategies that register custom
  * {@link java.beans.PropertyEditor property editors} with a
  * {@link org.springframework.beans.PropertyEditorRegistry property editor registry}.

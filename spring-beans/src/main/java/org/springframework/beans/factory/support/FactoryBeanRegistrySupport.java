@@ -108,6 +108,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 					else {
 						if (shouldPostProcess) {
 							if (isSingletonCurrentlyInCreation(beanName)) {
+								// 返回一个没有回调的Bean
 								// Temporarily return non-post-processed object, not storing it yet..
 								return object;
 							}
@@ -116,14 +117,14 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 								object = postProcessObjectFromFactoryBean(object, beanName);
 							}
 							catch (Throwable ex) {
-								throw new BeanCreationException(beanName,
-										"Post-processing of FactoryBean's singleton object failed", ex);
+								throw new BeanCreationException(beanName, "Post-processing of FactoryBean's singleton object failed", ex);
 							}
 							finally {
 								afterSingletonCreation(beanName);
 							}
 						}
 						if (containsSingleton(beanName)) {
+							//放入缓存
 							this.factoryBeanObjectCache.put(beanName, object);
 						}
 					}
