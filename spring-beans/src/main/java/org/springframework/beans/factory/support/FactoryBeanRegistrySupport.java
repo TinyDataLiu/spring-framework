@@ -204,7 +204,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 			//如果没有直接返回一个NullBean
 			object = new NullBean();
 		}
-		//存在就放回实例
+		//存在就反回实例
 		return object;
 	}
 
