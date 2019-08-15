@@ -326,8 +326,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 							throw ex;
 						}
 					});
-					//获取给定 Bean 的实例对象
-					//
+					//返回一个FactoryBean 获取这个FactoryBean创建的beanName 实例
 					bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
 				}
 				//IOC 容器创建原型模式 Bean 实例对象
@@ -1778,7 +1777,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * 获取Bean实例,获取指定的Bean实例，或者
+	 * 返回一个FactoryBean 获取这个FactoryBean创建的beanName 实例
 	 * Get the object for the given bean instance, either the bean
 	 * instance itself or its created object in case of a FactoryBean.
 	 * @param beanInstance the shared bean instance 				缓存的Bean实例
@@ -1794,6 +1793,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			if (beanInstance instanceof NullBean) {
 				return beanInstance;
 			}
+			//这里不是应判断了 如果不是FactoryBean 就抛出异常么 ？  下面为什么还要判断 ？
 			if (!(beanInstance instanceof FactoryBean)) {
 				throw new BeanIsNotAFactoryException(beanName, beanInstance.getClass());
 			}
@@ -1802,15 +1802,17 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
 		// If it's a FactoryBean, we use it to create a bean instance, unless the
 		// caller actually wants a reference to the factory.
-		// 如果不是FactoryBean 直接返回实例
+		// beanInstance 不是一个工厂Bean 或 name 判断是一个工厂FactoryBean 返回当前实例
 		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
 			return beanInstance;
 		}
 
+
+		//走到这里  ，说明 beanInstance 是一个FactoryBean 且 name 并没有标注他是一个工厂Bean
 		Object object = null;
 		//如果BeanDerinition为空，尝试从缓存获取Bean 通过实际的beanName
 		if (mbd == null) {
-			//尝试查询是否有此类FactoryBean
+			//从缓存中，拿到想要的Bean实例
 			object = getCachedObjectForFactoryBean(beanName);
 		}
 		//如果没有
