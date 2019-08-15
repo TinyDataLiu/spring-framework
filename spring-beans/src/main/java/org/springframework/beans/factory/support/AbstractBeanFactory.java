@@ -296,42 +296,55 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				// Create bean instance.
 				// 创建单例模式 Bean 的实例对象
 				if (mbd.isSingleton()) {
+					//这里使用了一个匿名内部类，创建 Bean 实例对象，并且注册给所依赖的对象
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
-							//这里使用了一个匿名内部类，创建 Bean 实例对象，并且注册给所依赖的对象
+							//创建一个指定 Bean 实例对象，如果有父级继承，则合并子类和父类的定义
 							return createBean(beanName, mbd, args);
 						}
 						catch (BeansException ex) {
 							// Explicitly remove instance from singleton cache: It might have been put there
 							// eagerly by the creation process, to allow for circular reference resolution.
 							// Also remove any beans that received a temporary reference to the bean.
+							// 显式地从容器单例模式 Bean 缓存中清除实例对象
 							destroySingleton(beanName);
 							throw ex;
 						}
 					});
+					//获取给定 Bean 的实例对象
 					bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
 				}
-
+				//IOC 容器创建原型模式 Bean 实例对象
 				else if (mbd.isPrototype()) {
 					// It's a prototype -> create a new instance.
+					//原型模式(Prototype)是每次都会创建一个新的对象
 					Object prototypeInstance = null;
 					try {
+						//回调 beforePrototypeCreation 方法，默认的功能是注册当前创建的原型对象
 						beforePrototypeCreation(beanName);
+						//创建指定 Bean 对象实例
 						prototypeInstance = createBean(beanName, mbd, args);
 					}
 					finally {
+						//回调 afterPrototypeCreation 方法，默认的功能告诉 IOC 容器指定 Bean 的原型对象不再创建
 						afterPrototypeCreation(beanName);
 					}
+					//获取给定 Bean 的实例对象
 					bean = getObjectForBeanInstance(prototypeInstance, name, beanName, mbd);
 				}
 
+				//要创建的 Bean 既不是单例模式，也不是原型模式，则根据 Bean 定义资源中
+				//配置的生命周期范围，选择实例化 Bean 的合适方法，这种在 Web 应用程序中
+				//比较常用，如：request、session、application 等生命周期
 				else {
 					String scopeName = mbd.getScope();
 					final Scope scope = this.scopes.get(scopeName);
+					//Bean 定义资源中没有配置生命周期范围，则 Bean 定义不合法
 					if (scope == null) {
 						throw new IllegalStateException("No Scope registered for scope name '" + scopeName + "'");
 					}
 					try {
+						//这里又使用了一个匿名内部类，获取一个指定生命周期范围的实例
 						Object scopedInstance = scope.get(beanName, () -> {
 							beforePrototypeCreation(beanName);
 							try {
@@ -341,6 +354,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 								afterPrototypeCreation(beanName);
 							}
 						});
+						//获取给定 Bean 的实例对象
 						bean = getObjectForBeanInstance(scopedInstance, name, beanName, mbd);
 					}
 					catch (IllegalStateException ex) {
@@ -358,6 +372,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		}
 
 		// Check if required type matches the type of the actual bean instance.
+		//对创建的 Bean 实例对象进行类型检查
 		if (requiredType != null && !requiredType.isInstance(bean)) {
 			try {
 				T convertedBean = getTypeConverter().convertIfNecessary(bean, requiredType);
