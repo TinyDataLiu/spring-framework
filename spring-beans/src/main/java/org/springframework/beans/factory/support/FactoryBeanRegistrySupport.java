@@ -142,14 +142,14 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 				return object;
 			}
 		}
-		//如果BeanFactory中不存在这个Bean ，或者BeanFactory 不是到哪里
+		//如果Factory不是单利，或者factory中不存在这个实例的缓存
 		else {
-			//获取对象
+			//从当前的或者给定的FactoryBean 中获取实例
+			//这里没有做缓存。
 			Object object = doGetObjectFromFactoryBean(factory, beanName);
 			if (shouldPostProcess) {
 				try {
-					//直接给对象添加回调链
-					//添加回调链，只是标记了
+					//注册后置处理器，就是添加代理方法
 					object = postProcessObjectFromFactoryBean(object, beanName);
 				}
 				catch (Throwable ex) {
@@ -172,6 +172,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	private Object doGetObjectFromFactoryBean(final FactoryBean<?> factory, final String beanName) throws BeanCreationException {
 		Object object;
 		try {
+			//首先尝试从当前工厂Bean 中获取
 			if (System.getSecurityManager() != null) {
 				AccessControlContext acc = getAccessControlContext();
 				try {
@@ -181,6 +182,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 					throw pae.getException();
 				}
 			}
+			//尝试从指定的工厂Bean 中获取
 			else {
 				object = factory.getObject();
 			}
@@ -193,12 +195,16 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 		}
 		// Do not accept a null value for a FactoryBean that's not fully
 		// initialized yet: Many FactoryBeans just return null then.
+		// 如果都没有
 		if (object == null) {
+			//如果正在创建这个Bean就抛出异常
 			if (isSingletonCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName, "FactoryBean which is currently in creation returned null from getObject");
 			}
+			//如果没有直接返回一个NullBean
 			object = new NullBean();
 		}
+		//存在就放回实例
 		return object;
 	}
 
