@@ -450,6 +450,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	@Override
+	public <T> T createBean(Class<T> beanClass) throws BeansException {
+		return super.createBean(beanClass);
+	}
+
+	@Override
 	public String[] getBeanDefinitionNames() {
 		String[] frozenNames = this.frozenBeanDefinitionNames;
 		if (frozenNames != null) {

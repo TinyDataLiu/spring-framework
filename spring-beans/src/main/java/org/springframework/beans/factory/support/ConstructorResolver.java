@@ -359,6 +359,7 @@ class ConstructorResolver {
 	}
 
 	/**
+	 * 通过工厂方法的形式创建BeanWrapper 并且完成参数匹配，方法重载等过程。
 	 * Instantiate the bean using a named factory method. The method may be static, if the
 	 * bean definition parameter specifies a class, rather than a "factory-bean", or
 	 * an instance variable on a factory object itself configured using Dependency Injection.
@@ -373,23 +374,25 @@ class ConstructorResolver {
 	 * method, or {@code null} if none (-> use constructor argument values from bean definition)
 	 * @return a BeanWrapper for the new instance
 	 */
-	public BeanWrapper instantiateUsingFactoryMethod(
-			String beanName, RootBeanDefinition mbd, @Nullable Object[] explicitArgs) {
-
+	public BeanWrapper instantiateUsingFactoryMethod( String beanName, RootBeanDefinition mbd, @Nullable Object[] explicitArgs) {
+		//
 		BeanWrapperImpl bw = new BeanWrapperImpl();
+		//当前beanFactory 初始化 BeanWrapperImpl
 		this.beanFactory.initBeanWrapper(bw);
-
 		Object factoryBean;
 		Class<?> factoryClass;
 		boolean isStatic;
 
 		String factoryBeanName = mbd.getFactoryBeanName();
+		//查看是不是拥有factoryBean
 		if (factoryBeanName != null) {
+			//如果 factoryBeanName 合需要创建实例的名称一样 则抛出异常
 			if (factoryBeanName.equals(beanName)) {
-				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
-						"factory-bean reference points back to the same bean definition");
+				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName, "factory-bean reference points back to the same bean definition");
 			}
+			//获取factoryBean
 			factoryBean = this.beanFactory.getBean(factoryBeanName);
+			//如果是单利的，且工厂中已经存在了这个实例，则抛出异常
 			if (mbd.isSingleton() && this.beanFactory.containsSingleton(beanName)) {
 				throw new ImplicitlyAppearedSingletonException();
 			}
@@ -399,18 +402,20 @@ class ConstructorResolver {
 		else {
 			// It's a static factory method on the bean class.
 			if (!mbd.hasBeanClass()) {
-				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
-						"bean definition declares neither a bean class nor a factory-bean reference");
+				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName, "bean definition declares neither a bean class nor a factory-bean reference");
 			}
 			factoryBean = null;
 			factoryClass = mbd.getBeanClass();
 			isStatic = true;
 		}
 
+		//需要使用的工厂方法。
 		Method factoryMethodToUse = null;
+		//参数辅助类
 		ArgumentsHolder argsHolderToUse = null;
+		//需要使用的参数
 		Object[] argsToUse = null;
-
+		//如果传入了参数
 		if (explicitArgs != null) {
 			argsToUse = explicitArgs;
 		}
@@ -427,13 +432,16 @@ class ConstructorResolver {
 				}
 			}
 			if (argsToResolve != null) {
+				//参数匹配的过程
 				argsToUse = resolvePreparedArguments(beanName, mbd, bw, factoryMethodToUse, argsToResolve, true);
 			}
 		}
 
+		//如果 factoryMethodToUse == null
 		if (factoryMethodToUse == null || argsToUse == null) {
 			// Need to determine the factory method...
 			// Try all methods with this name to see if they match the given arguments.
+			//尝试
 			factoryClass = ClassUtils.getUserClass(factoryClass);
 
 			List<Method> candidateList = null;
@@ -795,9 +803,10 @@ class ConstructorResolver {
 
 	/**
 	 * Resolve the prepared arguments stored in the given bean definition.
+	 * 参数匹配过程
 	 */
 	private Object[] resolvePreparedArguments(String beanName, RootBeanDefinition mbd, BeanWrapper bw,
-			Executable executable, Object[] argsToResolve, boolean fallback) {
+											  Executable executable, Object[] argsToResolve, boolean fallback) {
 
 		TypeConverter customConverter = this.beanFactory.getCustomTypeConverter();
 		TypeConverter converter = (customConverter != null ? customConverter : bw);
