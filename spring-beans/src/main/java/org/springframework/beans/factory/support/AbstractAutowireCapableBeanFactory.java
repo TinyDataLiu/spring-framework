@@ -658,7 +658,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		catch (BeanDefinitionValidationException ex) {
 			throw new BeanCreationException(mbd.getResourceDescription(), beanName, "Invalid destruction signature", ex);
 		}
-
 		return exposedObject;
 	}
 
