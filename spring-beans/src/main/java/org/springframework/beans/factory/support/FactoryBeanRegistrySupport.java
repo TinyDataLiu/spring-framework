@@ -85,57 +85,71 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	}
 
 	/**
+	 * 从指定的FactoryBean中获取对象
 	 * Obtain an object to expose from the given FactoryBean.
-	 * @param factory the FactoryBean instance
-	 * @param beanName the name of the bean
-	 * @param shouldPostProcess whether the bean is subject to post-processing
+	 * @param factory 			指定的FactoryBean 。	the FactoryBean instance
+	 * @param beanName 			想要获取的实际的Beanname，最终要保存到容器中的索引。 .the name of the bean
+	 * @param shouldPostProcess 是否给Bean添加后置处理器 whether the bean is subject to post-processing
 	 * @return the object obtained from the FactoryBean
 	 * @throws BeanCreationException if FactoryBean object creation failed
 	 * @see org.springframework.beans.factory.FactoryBean#getObject()
 	 */
 	protected Object getObjectFromFactoryBean(FactoryBean<?> factory, String beanName, boolean shouldPostProcess) {
+		//判断FactoryBean 是否为单例，且存在FactoryBean 实例
 		if (factory.isSingleton() && containsSingleton(beanName)) {
+			//加锁
 			synchronized (getSingletonMutex()) {
+				//从缓存中获取一个要创建的实例
 				Object object = this.factoryBeanObjectCache.get(beanName);
 				if (object == null) {
+					//用FactoryBean,创建或者查找一个Bean 实例
 					object = doGetObjectFromFactoryBean(factory, beanName);
 					// Only post-process and store if not put there already during getObject() call above
 					// (e.g. because of circular reference processing triggered by custom getBean calls)
 					Object alreadyThere = this.factoryBeanObjectCache.get(beanName);
 					if (alreadyThere != null) {
 						object = alreadyThere;
-					}
-					else {
+					} else {
 						if (shouldPostProcess) {
+							//如果当前正在创建这个Bean
 							if (isSingletonCurrentlyInCreation(beanName)) {
-								// 返回一个没有回调的Bean
+								// 临时返回一个没有添加回调函数的对象， 这个时候还没有做实际的缓存。就是没有放入Ioc
 								// Temporarily return non-post-processed object, not storing it yet..
 								return object;
 							}
+							//将当前创建的实例标记正在创建的对象。做一个标记
 							beforeSingletonCreation(beanName);
 							try {
+								//为当前实例添加回调函数，代理等···
 								object = postProcessObjectFromFactoryBean(object, beanName);
 							}
 							catch (Throwable ex) {
 								throw new BeanCreationException(beanName, "Post-processing of FactoryBean's singleton object failed", ex);
 							}
 							finally {
+								//移除当前创建Bean标记
 								afterSingletonCreation(beanName);
 							}
 						}
+
 						if (containsSingleton(beanName)) {
-							//放入缓存
+							//放入缓存 刷新缓存的过程， 以为当初缓存的Bean 可能没有添加回调事件
 							this.factoryBeanObjectCache.put(beanName, object);
 						}
 					}
 				}
+				//返回实例
 				return object;
 			}
 		}
+		//如果BeanFactory中不存在这个Bean ，或者BeanFactory 不是到哪里
 		else {
+			//获取对象
 			Object object = doGetObjectFromFactoryBean(factory, beanName);
 			if (shouldPostProcess) {
 				try {
+					//直接给对象添加回调链
+					//添加回调链，只是标记了
 					object = postProcessObjectFromFactoryBean(object, beanName);
 				}
 				catch (Throwable ex) {
@@ -147,6 +161,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	}
 
 	/**
+	 * 从指定的FactoryBean获取对象
 	 * Obtain an object to expose from the given FactoryBean.
 	 * @param factory the FactoryBean instance
 	 * @param beanName the name of the bean
@@ -154,9 +169,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	 * @throws BeanCreationException if FactoryBean object creation failed
 	 * @see org.springframework.beans.factory.FactoryBean#getObject()
 	 */
-	private Object doGetObjectFromFactoryBean(final FactoryBean<?> factory, final String beanName)
-			throws BeanCreationException {
-
+	private Object doGetObjectFromFactoryBean(final FactoryBean<?> factory, final String beanName) throws BeanCreationException {
 		Object object;
 		try {
 			if (System.getSecurityManager() != null) {
@@ -178,13 +191,11 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 		catch (Throwable ex) {
 			throw new BeanCreationException(beanName, "FactoryBean threw exception on object creation", ex);
 		}
-
 		// Do not accept a null value for a FactoryBean that's not fully
 		// initialized yet: Many FactoryBeans just return null then.
 		if (object == null) {
 			if (isSingletonCurrentlyInCreation(beanName)) {
-				throw new BeanCurrentlyInCreationException(
-						beanName, "FactoryBean which is currently in creation returned null from getObject");
+				throw new BeanCurrentlyInCreationException(beanName, "FactoryBean which is currently in creation returned null from getObject");
 			}
 			object = new NullBean();
 		}

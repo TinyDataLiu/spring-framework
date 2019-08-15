@@ -61,6 +61,7 @@ public interface BeanPostProcessor {
 	}
 
 	/**
+	 * gei Bean 添加后置处理事件
 	 * Apply this BeanPostProcessor to the given new bean instance <i>after</i> any bean
 	 * initialization callbacks (like InitializingBean's {@code afterPropertiesSet}
 	 * or a custom init-method). The bean will already be populated with property values.
