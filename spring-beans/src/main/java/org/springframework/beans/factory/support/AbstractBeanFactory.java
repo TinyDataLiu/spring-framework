@@ -249,6 +249,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			//父容器存在 且当前容器没有 BeanDefinition
 			////当前容器的父级容器存在，且当前容器中不存在指定名称的 Bean
 
+			//这一块是不是不是双亲委派模式？ 一直在调用父容器的查找？
 			//当parentBeanFactory 存在， 且没有缓存Bean定义文件
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
@@ -256,6 +257,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				String nameToLookup = originalBeanName(name);
 				//如果到最顶级实现
 				if (parentBeanFactory instanceof AbstractBeanFactory) {
+					//递归
 					return ((AbstractBeanFactory) parentBeanFactory).doGetBean(nameToLookup, requiredType, args, typeCheckOnly);
 				} else if (args != null) {
 					// Delegation to parent with explicit args.
