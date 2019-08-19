@@ -350,6 +350,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 	/**
 	 * List of HandlerMappings used by this servlet.
+	 * 用于存储URL method 关系映射
 	 */
 	@Nullable
 	private List<HandlerMapping> handlerMappings;
