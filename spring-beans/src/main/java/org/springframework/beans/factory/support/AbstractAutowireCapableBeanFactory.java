@@ -393,9 +393,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 	/**
 	 * 织入函数，将之前定义的回调函数织入 代理模式的东西 AOP 也需要这里的东西。
-	 * 将回调函数，添加到回调链里面
+	 * 将回调函数，添加到回调链里面。
+	 * <p>
+	 * 后置处理器
 	 *
-	 * @param existingBean the existing bean instance
+	 * @param existingBean the existing bean instance 已经存在的Bean 实例
 	 * @param beanName     the name of the bean, to be passed to it if necessary
 	 *                     (only passed to {@link BeanPostProcessor BeanPostProcessors};
 	 *                     can follow the {@link #ORIGINAL_INSTANCE_SUFFIX} convention in order to
@@ -1796,43 +1798,47 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			//为Bean 实例对象包装相关属性，如名称，类加载器，所属容器等信息
 			invokeAwareMethods(beanName, bean);
 		}
-
+		//这里的Bean已经初始化完成。
 		Object wrappedBean = bean;
 		//对 BeanPostProcessor 后置处理器的 postProcessBeforeInitialization
-		//回调方法的调用，为 Bean 实例初始化前做一些处理
+		//这里说明，Bean 已经实例化了， 所以才能进行
+		//Bean 已经实例化，或者Bean 不是合成Bean
 		if (mbd == null || !mbd.isSynthetic()) {
-			//前代理
+			//注册前置处理事件
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
 		try {
-			//调用Bean的初始化方法。
-			//调用初始化方法、
+			//调用Bean的初始化方法。 就是我们配置的init-method方法。
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		} catch (Throwable ex) {
 			throw new BeanCreationException((mbd != null ? mbd.getResourceDescription() : null), beanName, "Invocation of init method failed", ex);
 		}
-		//
+
+		//Bean 已经实例化，或者Bean 不是合成Bean
 		if (mbd == null || !mbd.isSynthetic()) {
-			//后置代理的处理
+			//注册后置处理事件
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
 		return wrappedBean;
 	}
 
 
-	//特殊功能性的处理。 比如是 BeanNameAware ， BeanClassLoaderAware BeanFactoryAware等， 设置初始化值。
+	//特殊功能性的处理。 比如是 BeanNameAware ， BeanClassLoaderAware BeanFactoryAware等，设置初始化值。
 	private void invokeAwareMethods(final String beanName, final Object bean) {
 		if (bean instanceof Aware) {
+			//设置setBeanName
 			if (bean instanceof BeanNameAware) {
 				((BeanNameAware) bean).setBeanName(beanName);
 			}
+			//设置ClassLoader
 			if (bean instanceof BeanClassLoaderAware) {
 				ClassLoader bcl = getBeanClassLoader();
 				if (bcl != null) {
 					((BeanClassLoaderAware) bean).setBeanClassLoader(bcl);
 				}
 			}
+			//设置BeanFactory
 			if (bean instanceof BeanFactoryAware) {
 				((BeanFactoryAware) bean).setBeanFactory(AbstractAutowireCapableBeanFactory.this);
 			}
