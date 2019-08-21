@@ -1250,8 +1250,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	protected void cleanupMultipart(HttpServletRequest request) {
 		if (this.multipartResolver != null) {
-			MultipartHttpServletRequest multipartRequest =
-					WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
+			MultipartHttpServletRequest multipartRequest = WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
 			if (multipartRequest != null) {
 				this.multipartResolver.cleanupMultipart(multipartRequest);
 			}
