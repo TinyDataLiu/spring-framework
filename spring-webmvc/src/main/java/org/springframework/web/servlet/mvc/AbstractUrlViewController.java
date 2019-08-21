@@ -94,6 +94,7 @@ public abstract class AbstractUrlViewController extends AbstractController {
 
 
 	/**
+	 * 内部处理Handler
 	 * Retrieves the URL path to use for lookup and delegates to
 	 * {@link #getViewNameForRequest}. Also adds the content of
 	 * {@link RequestContextUtils#getInputFlashMap} to the model.

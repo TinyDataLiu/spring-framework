@@ -151,8 +151,7 @@ public abstract class AbstractController extends WebContentGenerator implements 
 
 	@Override
 	@Nullable
-	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		if (HttpMethod.OPTIONS.matches(request.getMethod())) {
 			response.setHeader("Allow", getAllowHeader());

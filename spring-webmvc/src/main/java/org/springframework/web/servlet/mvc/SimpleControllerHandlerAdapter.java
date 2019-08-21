@@ -46,9 +46,7 @@ public class SimpleControllerHandlerAdapter implements HandlerAdapter {
 
 	@Override
 	@Nullable
-	public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
-
+	public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		return ((Controller) handler).handleRequest(request, response);
 	}
 

@@ -116,9 +116,10 @@ public class UrlFilenameViewController extends AbstractUrlViewController {
 	}
 
 	/**
+	 * 获取视图的文件名
 	 * Returns view name based on the URL filename,
 	 * with prefix/suffix applied when appropriate.
-	 * @param uri the request URI; for example {@code "/index.html"}
+	 * @param  uri the request URI; for example {@code "/index.html"}
 	 * @return the extracted URI filename; for example {@code "index"}
 	 * @see #extractViewNameFromUrlPath
 	 * @see #postProcessViewName
@@ -126,6 +127,7 @@ public class UrlFilenameViewController extends AbstractUrlViewController {
 	protected String getViewNameForUrlPath(String uri) {
 		String viewName = this.viewNameCache.get(uri);
 		if (viewName == null) {
+			//从URL 中提起 viewName
 			viewName = extractViewNameFromUrlPath(uri);
 			viewName = postProcessViewName(viewName);
 			this.viewNameCache.put(uri, viewName);

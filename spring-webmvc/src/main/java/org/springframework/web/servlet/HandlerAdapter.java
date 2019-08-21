@@ -50,6 +50,7 @@ import org.springframework.lang.Nullable;
 public interface HandlerAdapter {
 
 	/**
+	 * 验证给定的Handler 是否符合期望的Handler 定义， 也就是当前的HandlerAdapter 能不能处理这个Handler
 	 * Given a handler instance, return whether or not this {@code HandlerAdapter}
 	 * can support it. Typical HandlerAdapters will base the decision on the handler
 	 * type. HandlerAdapters will usually only support one handler type each.
@@ -63,6 +64,7 @@ public interface HandlerAdapter {
 	boolean supports(Object handler);
 
 	/**
+	 * 实际处理这次请求的方法。
 	 * Use the given handler to handle this request.
 	 * The workflow that is required may vary widely.
 	 * @param request current HTTP request
