@@ -93,7 +93,6 @@ public interface View {
 	 * @param response he HTTP response we are building
 	 * @throws Exception if rendering failed
 	 */
-	void render(@Nullable Map<String, ?> model, HttpServletRequest request, HttpServletResponse response)
-			throws Exception;
+	void render(@Nullable Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 }

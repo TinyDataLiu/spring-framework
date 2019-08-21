@@ -311,7 +311,9 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 					(this.staticAttributes.isEmpty() ? "" : ", static attributes " + this.staticAttributes));
 		}
 
+		//获取参数列表
 		Map<String, Object> mergedModel = createMergedOutputModel(model, request, response);
+		// resp 前置处理
 		prepareResponse(request, response);
 		renderMergedOutputModel(mergedModel, getRequestToExpose(request), response);
 	}
