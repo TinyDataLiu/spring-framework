@@ -40,14 +40,18 @@ public class HandlerExecutionChain {
 
 	private static final Log logger = LogFactory.getLog(HandlerExecutionChain.class);
 
+	/*handler ，实际持有的被调用对象的封装类*/
 	private final Object handler;
 
+	/*拦截器*/
 	@Nullable
 	private HandlerInterceptor[] interceptors;
 
+	/*拦截器链*/
 	@Nullable
 	private List<HandlerInterceptor> interceptorList;
 
+	/*拦截器标志位*/
 	private int interceptorIndex = -1;
 
 
