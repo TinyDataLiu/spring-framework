@@ -160,6 +160,11 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 		this.targetSource = EmptyTargetSource.forClass(targetClass);
 	}
 
+	/**
+	 * 获取目标类的类型
+	 *
+	 * @return
+	 */
 	@Override
 	@Nullable
 	public Class<?> getTargetClass() {
