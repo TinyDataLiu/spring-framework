@@ -43,11 +43,11 @@ public class HandlerExecutionChain {
 	/*handler ，实际持有的被调用对象的封装类*/
 	private final Object handler;
 
-	/*拦截器*/
+	/*拦截器 --> 无序*/
 	@Nullable
 	private HandlerInterceptor[] interceptors;
 
-	/*拦截器链*/
+	/*拦截器 --> 排序以后的存储*/
 	@Nullable
 	private List<HandlerInterceptor> interceptorList;
 
