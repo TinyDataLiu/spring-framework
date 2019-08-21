@@ -94,17 +94,21 @@ public abstract class AbstractUrlViewController extends AbstractController {
 
 
 	/**
-	 * 内部处理Handler
+	 * 内部处理获取ModelAndView ： 返回一个ModelAndView 已经对 redirect 缓存参数进行处理
+	 * redirect 传参的实现。
 	 * Retrieves the URL path to use for lookup and delegates to
 	 * {@link #getViewNameForRequest}. Also adds the content of
 	 * {@link RequestContextUtils#getInputFlashMap} to the model.
 	 */
 	@Override
 	protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) {
+		//获取模板名称 去掉perfix suffix 的文件名称
 		String viewName = getViewNameForRequest(request);
 		if (logger.isTraceEnabled()) {
 			logger.trace("Returning view name '" + viewName + "'");
 		}
+		//获取参数
+		//RequestContextUtils.getInputFlashMap(request)
 		return new ModelAndView(viewName, RequestContextUtils.getInputFlashMap(request));
 	}
 

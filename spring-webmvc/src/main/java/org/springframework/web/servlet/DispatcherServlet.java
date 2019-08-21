@@ -706,6 +706,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 * 异常处理器初始化
 	 * Initialize the HandlerExceptionResolver used by this class.
 	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
 	 * we default to no exception resolver.
@@ -724,8 +725,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		} else {
 			try {
-				HandlerExceptionResolver her =
-						context.getBean(HANDLER_EXCEPTION_RESOLVER_BEAN_NAME, HandlerExceptionResolver.class);
+				HandlerExceptionResolver her = context.getBean(HANDLER_EXCEPTION_RESOLVER_BEAN_NAME, HandlerExceptionResolver.class);
 				this.handlerExceptionResolvers = Collections.singletonList(her);
 			} catch (NoSuchBeanDefinitionException ex) {
 				// Ignore, no HandlerExceptionResolver is fine too.
@@ -744,6 +744,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 *
 	 * Initialize the RequestToViewNameTranslator used by this servlet instance.
 	 * <p>If no implementation is configured then we default to DefaultRequestToViewNameTranslator.
 	 */
@@ -767,6 +768,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 * 视图解析器初始化
 	 * Initialize the ViewResolvers used by this class.
 	 * <p>If no ViewResolver beans are defined in the BeanFactory for this
 	 * namespace, we default to InternalResourceViewResolver.
@@ -1084,6 +1086,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				if (asyncManager.isConcurrentHandlingStarted()) {
 					return;
 				}
+				//
 				applyDefaultViewName(processedRequest, mv);
 				//调用postHandler
 				mappedHandler.applyPostHandle(processedRequest, response, mv);
@@ -1441,9 +1444,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @see ViewResolver#resolveViewName
 	 */
 	@Nullable
-	protected View resolveViewName(String viewName, @Nullable Map<String, Object> model,
-								   Locale locale, HttpServletRequest request) throws Exception {
-
+	protected View resolveViewName(String viewName, @Nullable Map<String, Object> model,  Locale locale, HttpServletRequest request) throws Exception {
 		if (this.viewResolvers != null) {
 			for (ViewResolver viewResolver : this.viewResolvers) {
 				View view = viewResolver.resolveViewName(viewName, locale);
@@ -1455,9 +1456,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		return null;
 	}
 
-	private void triggerAfterCompletion(HttpServletRequest request, HttpServletResponse response,
-										@Nullable HandlerExecutionChain mappedHandler, Exception ex) throws Exception {
-
+	private void triggerAfterCompletion(HttpServletRequest request, HttpServletResponse response, @Nullable HandlerExecutionChain mappedHandler, Exception ex) throws Exception {
 		if (mappedHandler != null) {
 			mappedHandler.triggerAfterCompletion(request, response, ex);
 		}
