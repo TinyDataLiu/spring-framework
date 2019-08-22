@@ -27,7 +27,7 @@ import org.springframework.lang.Nullable;
  * Central interface to provide configuration for an application.
  * This is read-only while the application is running, but may be
  * reloaded if the implementation supports this.
- *
+ * <p>
  * <p>An ApplicationContext provides:
  * <ul>
  * <li>Bean factory methods for accessing application components.
@@ -43,7 +43,7 @@ import org.springframework.lang.Nullable;
  * context can be used by an entire web application, while each servlet has
  * its own child context that is independent of that of any other servlet.
  * </ul>
- *
+ * <p>
  * <p>In addition to standard {@link org.springframework.beans.factory.BeanFactory}
  * lifecycle capabilities, ApplicationContext implementations detect and invoke
  * {@link ApplicationContextAware} beans as well as {@link ResourceLoaderAware},
@@ -55,11 +55,11 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.beans.factory.BeanFactory
  * @see org.springframework.core.io.ResourceLoader
  */
-public interface ApplicationContext extends EnvironmentCapable, ListableBeanFactory, HierarchicalBeanFactory,
-		MessageSource, ApplicationEventPublisher, ResourcePatternResolver {
+public interface ApplicationContext extends EnvironmentCapable, ListableBeanFactory, HierarchicalBeanFactory, MessageSource, ApplicationEventPublisher, ResourcePatternResolver {
 
 	/**
 	 * Return the unique id of this application context.
+	 *
 	 * @return the unique id of the context, or {@code null} if none
 	 */
 	@Nullable
@@ -67,18 +67,21 @@ public interface ApplicationContext extends EnvironmentCapable, ListableBeanFact
 
 	/**
 	 * Return a name for the deployed application that this context belongs to.
+	 *
 	 * @return a name for the deployed application, or the empty String by default
 	 */
 	String getApplicationName();
 
 	/**
 	 * Return a friendly name for this context.
+	 *
 	 * @return a display name for this context (never {@code null})
 	 */
 	String getDisplayName();
 
 	/**
 	 * Return the timestamp when this context was first loaded.
+	 *
 	 * @return the timestamp (ms) when this context was first loaded
 	 */
 	long getStartupDate();
@@ -86,6 +89,7 @@ public interface ApplicationContext extends EnvironmentCapable, ListableBeanFact
 	/**
 	 * Return the parent context, or {@code null} if there is no parent
 	 * and this is the root of the context hierarchy.
+	 *
 	 * @return the parent context, or {@code null} if there is no parent
 	 */
 	@Nullable
@@ -104,11 +108,12 @@ public interface ApplicationContext extends EnvironmentCapable, ListableBeanFact
 	 * after the application context has been closed.</b> In current Spring Framework
 	 * versions, only refreshable application contexts behave that way; as of 4.2,
 	 * all application context implementations will be required to comply.
+	 *
 	 * @return the AutowireCapableBeanFactory for this context
 	 * @throws IllegalStateException if the context does not support the
-	 * {@link AutowireCapableBeanFactory} interface, or does not hold an
-	 * autowire-capable bean factory yet (e.g. if {@code refresh()} has
-	 * never been called), or if the context has been closed already
+	 *                               {@link AutowireCapableBeanFactory} interface, or does not hold an
+	 *                               autowire-capable bean factory yet (e.g. if {@code refresh()} has
+	 *                               never been called), or if the context has been closed already
 	 * @see ConfigurableApplicationContext#refresh()
 	 * @see ConfigurableApplicationContext#getBeanFactory()
 	 */
