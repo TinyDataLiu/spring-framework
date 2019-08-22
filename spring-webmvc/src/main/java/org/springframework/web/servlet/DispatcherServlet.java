@@ -744,7 +744,6 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 *
 	 * Initialize the RequestToViewNameTranslator used by this servlet instance.
 	 * <p>If no implementation is configured then we default to DefaultRequestToViewNameTranslator.
 	 */
@@ -1053,7 +1052,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request.
-				// 查找已经缓存的Handler
+				// 通过URL 获取一个要执行的执行器链
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
@@ -1297,7 +1296,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 * 通过handler 获取一个适配器
 	 * Return the HandlerAdapter for this handler object.
+	 * 通过当前的handler 获取一个 HandlerAdapter
 	 *
 	 * @param handler the handler object to find an adapter for
 	 * @throws ServletException if no HandlerAdapter can be found for the handler. This is a fatal error.
@@ -1310,8 +1311,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 			}
 		}
-		throw new ServletException("No adapter for handler [" + handler +
-				"]: The DispatcherServlet configuration needs to include a HandlerAdapter that supports this handler");
+		throw new ServletException("No adapter for handler [" + handler + "]: The DispatcherServlet configuration needs to include a HandlerAdapter that supports this handler");
 	}
 
 	/**
@@ -1368,6 +1368,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 *
 	 * Render the given ModelAndView.
 	 * <p>This is the last stage in handling a request. It may involve resolving the view by name.
 	 *
@@ -1448,7 +1449,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @see ViewResolver#resolveViewName
 	 */
 	@Nullable
-	protected View resolveViewName(String viewName, @Nullable Map<String, Object> model,  Locale locale, HttpServletRequest request) throws Exception {
+	protected View resolveViewName(String viewName, @Nullable Map<String, Object> model, Locale locale, HttpServletRequest request) throws Exception {
 		if (this.viewResolvers != null) {
 			//遍历所有符合条件的视图解析器，知道发现其中有一个 视图解析符合体检， 则返回视图
 			for (ViewResolver viewResolver : this.viewResolvers) {
