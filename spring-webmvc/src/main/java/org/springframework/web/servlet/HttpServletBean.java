@@ -153,13 +153,14 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 		//如果配置信息已经存在，先不管他干啥了， 我们的默认是第一次初始化，这里应该没有东西
 		if (!pvs.isEmpty()) {
 			try {
-				//将自身包装成由spring 管理的增强Bean
+				//定位资源，并将自己封装起来BeanWrapper
 				BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(this);
-				//资源管理器： 用于读取配置文件用的
+				//获取资源管理器 当前ServletContext 防区
 				ResourceLoader resourceLoader = new ServletContextResourceLoader(getServletContext());
 				//设置一个当前环境需要的文件解释器
 				bw.registerCustomEditor(Resource.class, new ResourceEditor(resourceLoader, getEnvironment()));
 				initBeanWrapper(bw);
+				//设置配置信息
 				bw.setPropertyValues(pvs, true);
 			}
 			catch (BeansException ex) {
@@ -169,7 +170,8 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 				throw ex;
 			}
 		}
-		// Let subclasses do whatever initialization they like. 这里没看太懂， 说是调用的子类的方法。点进去看一下。
+		// Let subclasses do whatever initialization they like.
+		// 初始化ServletBean
 		initServletBean();
 	}
 
