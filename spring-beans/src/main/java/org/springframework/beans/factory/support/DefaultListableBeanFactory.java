@@ -1276,9 +1276,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	@Nullable
-	private Object resolveMultipleBeans(DependencyDescriptor descriptor, @Nullable String beanName,
-										@Nullable Set<String> autowiredBeanNames, @Nullable TypeConverter typeConverter) {
-
+	private Object resolveMultipleBeans(DependencyDescriptor descriptor, @Nullable String beanName, @Nullable Set<String> autowiredBeanNames, @Nullable TypeConverter typeConverter) {
 		final Class<?> type = descriptor.getDependencyType();
 
 		if (descriptor instanceof StreamDependencyDescriptor) {
@@ -1413,8 +1411,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * @see #autowireByType
 	 * @see #autowireConstructor
 	 */
-	protected Map<String, Object> findAutowireCandidates(
-			@Nullable String beanName, Class<?> requiredType, DependencyDescriptor descriptor) {
+	protected Map<String, Object> findAutowireCandidates(@Nullable String beanName, Class<?> requiredType, DependencyDescriptor descriptor) {
 
 		String[] candidateNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 				this, requiredType, true, descriptor.isEager());
