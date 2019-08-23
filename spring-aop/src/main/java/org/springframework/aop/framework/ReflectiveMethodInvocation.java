@@ -155,7 +155,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 
 
 	/**
-	 * 递归调用
+	 * 责任链模式，调用
 	 *
 	 * @return
 	 * @throws Throwable
@@ -164,7 +164,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 	@Nullable
 	public Object proceed() throws Throwable {
 		//	We start with an index of -1 and increment early.
-		//
+		//  调用实际的方法
 		if (this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) {
 			return invokeJoinpoint();
 		}
@@ -180,6 +180,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 			} else {
 				// Dynamic matching failed.
 				// Skip this interceptor and invoke the next in the chain.
+				//
 				return proceed();
 			}
 		} else {
