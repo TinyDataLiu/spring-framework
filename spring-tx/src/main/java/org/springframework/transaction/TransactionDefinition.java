@@ -44,6 +44,7 @@ import org.springframework.lang.Nullable;
 public interface TransactionDefinition {
 
 	/**
+	 * 支持当前事务， 如果没有就新建一个事务执行
 	 * 支持当前事务，如果当前没有事务，就新建一个事务。这是最常见的选择，也是Spring默认的事务的传播。
 	 * Support a current transaction; create a new one if none exists.
 	 * Analogous to the EJB transaction attribute of the same name.
@@ -53,6 +54,7 @@ public interface TransactionDefinition {
 	int PROPAGATION_REQUIRED = 0;
 
 	/**
+	 * 你有我就有，你没有我就没有，完全取决于外部事务配置。
 	 * Support a current transaction; execute non-transactionally if none exists.
 	 * Analogous to the EJB transaction attribute of the same name.
 	 * <p><b>NOTE:</b> For transaction managers with transaction synchronization,
@@ -75,6 +77,7 @@ public interface TransactionDefinition {
 	int PROPAGATION_SUPPORTS = 1;
 
 	/**
+	 * 支持当前事务，如果没有当前没有事务就抛出异常
 	 * Support a current transaction; throw an exception if no current transaction
 	 * exists. Analogous to the EJB transaction attribute of the same name.
 	 * <p>Note that transaction synchronization within a {@code PROPAGATION_MANDATORY}
@@ -83,6 +86,7 @@ public interface TransactionDefinition {
 	int PROPAGATION_MANDATORY = 2;
 
 	/**
+	 * 如果当前执行有事物，则外部事物挂起，先执行，内部事物内部事务出现异常回滚， 外部事物可以选择回滚或者提交。根据内部事物抛出异常类型来处理等。
 	 * Create a new transaction, suspending the current transaction if one exists.
 	 * Analogous to the EJB transaction attribute of the same name.
 	 * <p><b>NOTE:</b> Actual transaction suspension will not work out-of-the-box
@@ -99,6 +103,7 @@ public interface TransactionDefinition {
 	int PROPAGATION_REQUIRES_NEW = 3;
 
 	/**
+	 * 不支持事物
 	 * Do not support a current transaction; rather always execute non-transactionally.
 	 * Analogous to the EJB transaction attribute of the same name.
 	 * <p><b>NOTE:</b> Actual transaction suspension will not work out-of-the-box
