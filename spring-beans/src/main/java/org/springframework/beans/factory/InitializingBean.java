@@ -17,10 +17,11 @@
 package org.springframework.beans.factory;
 
 /**
+ * 声明周期管理：初始化
  * Interface to be implemented by beans that need to react once all their properties
  * have been set by a {@link BeanFactory}: e.g. to perform custom initialization,
  * or merely to check that all mandatory properties have been set.
- *
+ * <p>
  * <p>An alternative to implementing {@code InitializingBean} is specifying a custom
  * init method, for example in an XML bean definition. For a list of all bean
  * lifecycle methods, see the {@link BeanFactory BeanFactory javadocs}.
@@ -38,8 +39,9 @@ public interface InitializingBean {
 	 * and satisfied {@link BeanFactoryAware}, {@code ApplicationContextAware} etc.
 	 * <p>This method allows the bean instance to perform validation of its overall
 	 * configuration and final initialization when all bean properties have been set.
+	 *
 	 * @throws Exception in the event of misconfiguration (such as failure to set an
-	 * essential property) or if initialization fails for any other reason
+	 *                   essential property) or if initialization fails for any other reason
 	 */
 	void afterPropertiesSet() throws Exception;
 
