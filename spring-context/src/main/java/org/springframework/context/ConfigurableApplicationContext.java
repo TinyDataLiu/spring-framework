@@ -210,5 +210,4 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	 * @see #addBeanFactoryPostProcessor
 	 */
 	ConfigurableListableBeanFactory getBeanFactory() throws IllegalStateException;
-
 }
